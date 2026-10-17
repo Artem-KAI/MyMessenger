@@ -6,9 +6,10 @@
 - [x] Валідація: `app/validation.py`
 - [x] Атомарне збереження в JSON: `app/storage.py`
 - [x] Сервіс: користувачі, розмови, повідомлення, історія: `app/services.py`
-- [ ] Групові чати (3+), пошук повідомлень
-- [ ] REST/WebSocket API поверх `MessengerService`
-- [ ] Обробка помилок сховища, тести
+- [x] Групові чати (3+), пошук повідомлень
+- [x] REST API поверх `MessengerService`: `app/api.py`, опис у `docs/API.md`
+- [ ] WebSocket поверх `MessengerService` (живі оновлення)
+- [x] Обробка помилок сховища (`StorageError`), тести
 
 ## Frontend / клієнт: напарник
 Гілки `frontend/<фіча>`, папка `app/static/`.
@@ -19,4 +20,4 @@
 - [ ] README: скріншоти, запис 15 с
 
 ## Контракт
-Фронтенд працює з API бекенду (опис у `docs/API.md`, треба узгодити); до готовності бекенду використовує мок-дані.
+Фронтенд працює з REST API з `docs/API.md`. Запуск: `uvicorn app.main:app --reload`, документація на `/docs`.

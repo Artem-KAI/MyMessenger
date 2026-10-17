@@ -3,9 +3,12 @@ from pathlib import Path
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
-STATIC_DIR = Path(__file__).parent / "static"
+from .api import router as api_router
+
+STATIC_DIR =Path(__file__).parent / "static"
 
 app = FastAPI(title="Messenger")
+app.include_router(api_router)
 
 
 class ConnectionManager:

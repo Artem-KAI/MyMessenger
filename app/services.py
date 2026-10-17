@@ -69,6 +69,25 @@ class MessengerService:
         self._save()
         return msg
 
+    def list_conversations(self, user_id: str | None = None) -> list[Conversation]:
+        if user_id is None:
+            return list(self.conversations)
+        return [c for c in self.conversations if user_id in c.participants]
+
+    def search_messages(self, query: str, user_id: str | None = None) -> list[Message]:
+        query = query.strip().lower()
+        if not query:
+            raise ValidationError("Пошуковий запит не може бути порожнім")
+        allowed = {c.id for c in self.list_conversations(user_id)}
+        return sorted(
+            (
+                m
+                for m in self.messages
+                if m.conversation_id in allowed and query in m.text.lower()
+            ),
+            key=lambda m: m.created_at,
+        )
+
     def get_history(self, conversation_id: str) -> list[Message]:
         return sorted(
             (m for m in self.messages if m.conversation_id == conversation_id),

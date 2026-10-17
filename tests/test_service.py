@@ -38,3 +38,11 @@ def test_persistence_after_restart(path):
     history = reloaded.get_history(conv.id)
     assert [m.text for m in history] == ["привіт"]
     assert history[0].created_at.tzinfo is not None
+
+
+def test_corrupted_file_raises_storage_error(path):
+    from app.storage import StorageError
+
+    path.write_text("{ не json", encoding="utf-8")
+    with pytest.raises(StorageError):
+        MessengerService(JsonStorage(path))

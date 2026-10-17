@@ -5,6 +5,10 @@ from pathlib import Path
 from typing import Any
 
 
+class StorageError(Exception):
+    pass
+
+
 class JsonStorage:
     """Stores the whole dataset in one JSON file with atomic writes."""
 
@@ -14,8 +18,11 @@ class JsonStorage:
     def load(self) -> dict[str, Any]:
         if not self.path.exists():
             return {"users": [], "conversations": [], "messages": []}
-        with self.path.open(encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with self.path.open(encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, UnicodeDecodeError) as e:
+            raise StorageError(f"Файл даних пошкоджений: {self.path}") from e
 
     def save(self, data: dict[str, Any]) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
